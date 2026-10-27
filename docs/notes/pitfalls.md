@@ -11,6 +11,8 @@
 - Windows で git checkout すると .sh/.py が CRLF になりラズパイで動かない → .gitattributes で LF 固定済み。消さない
 - エクスプローラーで zip 展開すると .sh の実行ビットが落ちて git に差分が出る → PC のクローンは `git config core.fileMode false` 済み
 - tests/test_link.py は Windows では動かない（os.set_blocking がパイプに使えない）→ ラズパイで実行する。test_logic.py は Windows でも通る
+- Windows で raspberrypi.local（mDNS）の名前解決が不安定（同じ PC で通ったり通らなかったり）→ SSH config の別名 wire-pi で IP 直指定
+- テザリングの IP（172.20.10.x）は機体間で使い回される。known_hosts の 172.20.10.2 には mecanum の Pi の鍵が残っている → 消さずに HostKeyAlias で照合
 - Wi-Fi 2.4GHz と Bluetooth は干渉する → ラズパイの Wi-Fi は 5GHz か有線
 
 ## 検討時の取り違え

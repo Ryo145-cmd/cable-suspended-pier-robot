@@ -32,3 +32,7 @@
   - config.py の保護：ラズパイの作業ツリーに変更があると updateInstead が push を拒否する。拒否されたら `git diff` を見てユーザーに聞く（勝手に捨てない）
   - 理由：手順を mecanum と1本化、ラズパイ上のコードがどのコミットか git で分かる。得失はユーザーに提示済み
   - deploy.ps1 / deploy.sh は消さず「push pi → ラズパイでテスト」の薄いラッパーに書き換え
+- ラズパイの OS は既存の Raspberry Pi OS デスクトップ版（Debian 13 trixie, aarch64, Python 3.13.5）をそのまま使う（Lite に入れ直さない）
+  - 理由：既存ファイル（Dynamixel_tutorial, venv, test）を消さずに済む。メモリ 3.8GB 中 使用 338MB で余裕。必要パッケージは全て apt にあり、ryosuke は gpio/i2c/input 所属済み
+  - 欠点：起動が遅い、デスクトップの Bluetooth 管理と競合しうる（ペアリングは bluetoothctl で）、Python 3.13 は未検証（Pi 上のテストで確認）
+- PC からの接続名は SSH config の別名 `wire-pi`（ryosuke@172.20.10.2、HostKeyAlias raspberrypi.local）。PI_HOST=wire-pi、remote pi=wire-pi:cable-suspended-pier-robot
