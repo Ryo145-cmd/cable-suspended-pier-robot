@@ -57,6 +57,12 @@
 **記録フォルダは `docs/notes/`**（上の 1. の「記録」）。セッション開始時に必ず読む：
 `docs/notes/status.md`（現在地）→ `docs/notes/decisions.md` → `docs/notes/rejected.md` → `docs/notes/pitfalls.md`
 
+### リポジトリと記録
+- GitHub：https://github.com/Ryo145-cmd/cable-suspended-pier-robot（PC の作業コピーは `C:Usersbellrble-suspended-pier-robot`）
+- **節目ごと（作業の区切り、方針変更、`/compact` の直前）に、記録とコードを commit して push する。** PC にだけ残さない。記録の正本は GitHub
+- コミットメッセージは日本語で、何をしたかを 1 行で書く
+- 実験データは `data/` に置き、commit しない（`.gitignore` 済み）
+
 ## 何のリポジトリか
 橋脚・鋼桁の塗膜を IH で加熱しスクレーパで剥がす装置（日本橋梁 IH式塗膜剥離装置）を、
 上部レールから4本のワイヤで吊り、壁面に沿って動かすロボットの制御プログラム。
