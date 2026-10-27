@@ -9,6 +9,7 @@
 - Windows の scp はローカル側のワイルドカード（`dir\*`）が使えない → tar にまとめて送る（deploy.ps1）
 - PowerShell 5.1 は BOM なし UTF-8 の .ps1 を Shift-JIS として読み、日本語で壊れる → .ps1 は UTF-8 BOM 付きで保存
 - Windows で git checkout すると .sh/.py が CRLF になりラズパイで動かない → .gitattributes で LF 固定済み。消さない
+- エクスプローラーで zip 展開すると .sh の実行ビットが落ちて git に差分が出る → PC のクローンは `git config core.fileMode false` 済み
 - Wi-Fi 2.4GHz と Bluetooth は干渉する → ラズパイの Wi-Fi は 5GHz か有線
 
 ## 検討時の取り違え
