@@ -13,6 +13,7 @@
 - tests/test_link.py は Windows では動かない（os.set_blocking がパイプに使えない）→ ラズパイで実行する。test_logic.py は Windows でも通る
 - Windows で raspberrypi.local（mDNS）の名前解決が不安定（同じ PC で通ったり通らなかったり）→ SSH config の別名 wire-pi で IP 直指定
 - テザリングの IP（172.20.10.x）は機体間で使い回される。known_hosts の 172.20.10.2 には mecanum の Pi の鍵が残っている → 消さずに HostKeyAlias で照合
+- bluetoothctl をパイプで使うと "Failed to register agent object"（デスクトップ版の Bluetooth 管理が既に agent を登録しているため）が出るが、DualSense のペアリングは成功する
 - Wi-Fi 2.4GHz と Bluetooth は干渉する → ラズパイの Wi-Fi は 5GHz か有線
 
 ## 検討時の取り違え

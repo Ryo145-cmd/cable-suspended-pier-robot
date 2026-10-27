@@ -9,6 +9,7 @@
 - ラズパイの環境構築（既存の Raspberry Pi OS デスクトップ版 trixie をそのまま使う）。`scripts/setup_pi.sh` → 再起動 → `scripts/deploy.ps1`（中身は `git push pi main`。PC に remote pi は追加済み）
 - 2026-10-27：リポジトリは PC の `~/cable-suspended-pier-robot`、構成は wall-climbing-robot-mecanum に揃えた。origin=GitHub(Ryo145-cmd/cable-suspended-pier-robot)、main を push 済み
 - 2026-10-27：SSH 鍵認証 設定済み（`ssh wire-pi`）。PI_HOST=wire-pi（ユーザー環境変数）。sudo はパスワード要
+- 2026-10-27：DualSense を入れ替え。旧 D4:2F:4B:50:E5:70 の登録を削除、新 34:6F:3F:7E:A8:FC をペアリング・信頼・接続済み（bluetoothctl）
 - 2026-10-27：setup_pi.sh をラズパイの ~/setup_pi.sh に送付済み。ユーザーが `ssh -t wire-pi "bash ~/setup_pi.sh"` → `sudo reboot` を実行待ち → その後 deploy.ps1（push pi＋テスト）
   → PC 上で確認済み（2026-10-27）：空のリポジトリへの最初の push で作業ツリーが展開される／作業ツリーに変更があると push は "Working directory has unstaged changes" で拒否される
 
