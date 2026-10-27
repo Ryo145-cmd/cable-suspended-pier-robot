@@ -11,6 +11,7 @@
 - 2026-10-27：SSH 鍵認証 設定済み（`ssh wire-pi`）。PI_HOST=wire-pi（ユーザー環境変数）。sudo はパスワード要
 - 2026-10-27：DualSense を入れ替え。旧 D4:2F:4B:50:E5:70 の登録を削除、新 34:6F:3F:7E:A8:FC をペアリング・信頼・接続済み（bluetoothctl）
 - 2026-10-27：setup_pi.sh 実行済み → 再起動 → deploy.ps1（push pi）で反映。Pi 上で tests 12 件すべて OK（Python 3.13.5）。IBT-2・IMU は未接続
+- 2026-10-27：link_check（机上・静止・近距離、8 秒）：Motion Sensors で生存確認 ok、受信 378〜766 回/秒、最大間隔 10.7〜28.7 ms（しきい値 200 ms に対し十分小さい）。電源 OFF 時の途絶検出・作業距離での確認・gamepad_check は未実施
   → PC 上で確認済み（2026-10-27）：空のリポジトリへの最初の push で作業ツリーが展開される／作業ツリーに変更があると push は "Working directory has unstaged changes" で拒否される
 
 ## 次の一手
@@ -23,7 +24,7 @@
 - 左右移動の向き LATERAL_SIGN、各モータの invert、IMU_AXIS_* の符号
 - モータ電流（概算：通常1〜2A/台、ロック4〜6A/台）
 - IHヘッドの位置、下部シリンダの役割
-- 実機で DualSense のモーションセンサが見つかるか、普段の最大受信間隔
+- 実機で DualSense のモーションセンサが見つかるか、普段の最大受信間隔 → 2026-10-27 机上で確認済み（見つかる、最大 28.7 ms）。作業距離では未確認
 - レール固定マグネット：配置、吊り荷重合計、試験体の膜厚（docs/magnet_rail.md）
 
 ## 未実装・課題
