@@ -26,3 +26,9 @@
     図・写真（docs/figs/、docs/*.png）→ docs/images/、実験データ用に data/（中身は git 管理外）
   - scripts/（setup_pi.sh, deploy.*）は mecanum に無いが、ROS なしの本機では転送・構築に必要なので残す
   - ラズパイ側の配置先 ~/wire_robot/ は変えない
+- ラズパイへの反映を mecanum と同じ `git push pi main` 方式に変更（scp+tar 方式をやめる。ユーザー承認）
+  - ラズパイ側：`~/cable-suspended-pier-robot` を `git init -b main` し `receive.denyCurrentBranch=updateInstead`（setup_pi.sh で作る）。GitHub の認証は入れない
+  - `~/wire_robot` はそこから `src/wire_robot` へのシンボリックリンクにする（README・仕様書の `~/wire_robot` の記述をそのまま使えるように）
+  - config.py の保護：ラズパイの作業ツリーに変更があると updateInstead が push を拒否する。拒否されたら `git diff` を見てユーザーに聞く（勝手に捨てない）
+  - 理由：手順を mecanum と1本化、ラズパイ上のコードがどのコミットか git で分かる。得失はユーザーに提示済み
+  - deploy.ps1 / deploy.sh は消さず「push pi → ラズパイでテスト」の薄いラッパーに書き換え

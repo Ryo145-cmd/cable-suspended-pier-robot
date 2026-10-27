@@ -65,7 +65,7 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 ## 構成
 | パス | 内容 |
 |---|---|
-| `src/wire_robot/` | 制御プログラム本体（ラズパイの `~/wire_robot/` に配置する） |
+| `src/wire_robot/` | 制御プログラム本体（ラズパイでは `~/cable-suspended-pier-robot/src/wire_robot`。`~/wire_robot` はそこへのリンク） |
 | `src/wire_robot/config.py` | ピン・回転方向・ゲイン・ボタン。**実機調整は基本ここだけ** |
 | `src/wire_robot/README.md` | セットアップ・操作・安全機能の詳細 |
 | `docs/SPEC.pdf` | 仕様書（第9章が試験手順）。生成元HTMLは無いので PDF は手で更新できない |
@@ -74,14 +74,15 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 | `docs/images/` | 図（svg）・写真 |
 | `data/` | 実験データ（中身は git 管理外） |
 | `scripts/setup_pi.sh` | ラズパイの環境構築（ラズパイ上で実行） |
-| `scripts/deploy.ps1` / `deploy.sh` | PC → ラズパイへプログラムを転送 |
+| `scripts/deploy.ps1` / `deploy.sh` | PC → ラズパイへ反映（`git push pi main` → ラズパイでテスト） |
 
 ## ラズパイへの接続
 - 接続先は環境変数 `PI_HOST`（例 `pi@raspberrypi.local`）。未設定ならユーザーに聞く
 - SSH は鍵認証前提（パスワード入力は対話になり実行できない）。`ssh $PI_HOST "コマンド"` で実行
 - `sudo` がパスワードを要求して止まる場合は、ユーザーに手で実行してもらう
-- 転送：`scripts/deploy.ps1`（Windows）または `scripts/deploy.sh`。転送先は `~/wire_robot/`
-- ラズパイ側の `config.py` を現場で直接書き換えている可能性がある。上書き前に `diff` で確認し、差分があればユーザーに聞く（deploy スクリプトは config.py を既定で上書きしない）
+- 反映：mecanum と同じ方式。PC で commit → `git push origin main`（GitHub）と `git push pi main`（ラズパイの作業ツリーを直接更新。ラズパイ側は receive.denyCurrentBranch=updateInstead）。`scripts/deploy.ps1` は push pi とラズパイでのテストをまとめたもの
+- ラズパイには GitHub の認証を設定しない。ラズパイではコードを編集しない（現場での config.py 調整は例外。下記）
+- ラズパイ側の `config.py` を現場で直接書き換えている可能性がある。その場合 push pi は拒否される。`ssh $PI_HOST "cd ~/cable-suspended-pier-robot && git diff"` で差分を見てユーザーに聞く（ラズパイ側の変更を勝手に捨てない）
 
 ## 安全ルール（必ず守る）
 このプログラムは人の近くで、重量物を吊って動くモータを制御する。

@@ -25,12 +25,25 @@ ACTION=="add", SUBSYSTEM=="leds", KERNEL=="*:rgb:indicator", RUN+="/bin/chgrp in
 RULE
 sudo udevadm control --reload-rules
 
+echo "== 受け取り用リポジトリ（PC から git push pi main で反映する） =="
+REPO="$HOME/cable-suspended-pier-robot"
+if [ ! -d "$REPO/.git" ]; then
+    git init -q -b main "$REPO"
+fi
+git -C "$REPO" config receive.denyCurrentBranch updateInstead
+# README・仕様書の ~/wire_robot をそのまま使えるようにリンクを張る
+if [ -L "$HOME/wire_robot" ] || [ ! -e "$HOME/wire_robot" ]; then
+    ln -sfn "$REPO/src/wire_robot" "$HOME/wire_robot"
+else
+    echo "注意：$HOME/wire_robot が実体のフォルダとして既にあります。中身を確認して退避してから再実行してください"
+fi
+
 echo "== ハードなしのテスト =="
 DIR="$HOME/wire_robot"
-if [ -d "$DIR" ]; then
+if [ -f "$DIR/tests/test_logic.py" ]; then
     (cd "$DIR" && python3 tests/test_logic.py && python3 tests/test_link.py)
 else
-    echo "($DIR がまだありません。deploy 後に tests を実行してください)"
+    echo "(まだコードがありません。PC から scripts/deploy.ps1 で反映するとテストまで走ります)"
 fi
 
 echo "== 情報 =="

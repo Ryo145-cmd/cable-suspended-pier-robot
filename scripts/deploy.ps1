@@ -1,34 +1,23 @@
-﻿# PC(Windows) → ラズパイへプログラムを転送する
-#   .\scripts\deploy.ps1 pi@raspberrypi.local          （config.py は上書きしない）
-#   .\scripts\deploy.ps1 pi@raspberrypi.local -Config  （config.py も上書きする）
-# 環境変数 PI_HOST があれば引数は省略可。SSH は鍵認証を設定しておくこと
+﻿# PC(Windows) → ラズパイへ反映する（git push pi main → ラズパイでテスト）
+#   .\scripts\deploy.ps1                         （PI_HOST を使う）
+#   .\scripts\deploy.ps1 ryosuke@raspberrypi.local
+# 前提：ラズパイで setup_pi.sh 済み、PC に remote "pi" がある
+#   git remote add pi ryosuke@raspberrypi.local:cable-suspended-pier-robot
+# ラズパイ側に未コミットの変更（現場で書き換えた config.py など）があると push は拒否される。
+# そのときは表示される git diff を確認してから対処する（勝手に捨てない）
 param(
-    [string]$PiHost = $env:PI_HOST,
-    [switch]$Config
+    [string]$PiHost = $env:PI_HOST
 )
 $ErrorActionPreference = "Stop"
-if (-not $PiHost) { Write-Error "接続先を指定してください（例: pi@raspberrypi.local）" }
+if (-not $PiHost) { Write-Error "接続先を指定してください（例: ryosuke@raspberrypi.local）" }
 
-$src = Join-Path $PSScriptRoot "..\src\wire_robot"
-$tmp = Join-Path $env:TEMP "wire_robot_deploy"
-if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
-Copy-Item $src $tmp -Recurse
-Get-ChildItem $tmp -Recurse -Directory -Filter __pycache__ | Remove-Item -Recurse -Force
-
-ssh $PiHost "mkdir -p ~/wire_robot"
-if (-not $Config) {
-    # ラズパイ側に config.py があれば残す（現場で調整した値を消さないため）
-    $exists = ssh $PiHost "test -f ~/wire_robot/config.py && echo yes"
-    if ($exists -eq "yes") {
-        Remove-Item (Join-Path $tmp "config.py")
-        Write-Host "config.py はラズパイ側のものを残します（上書きするなら -Config）"
-    }
+$repo = "~/cable-suspended-pier-robot"
+git -C (Join-Path $PSScriptRoot "..") push pi main
+if ($LASTEXITCODE -ne 0) {
+    Write-Host "push が拒否されました。ラズパイ側の変更："
+    ssh $PiHost "cd $repo && git status --short && git diff"
+    exit 1
 }
-# tar にまとめて送る（Windows の scp はワイルドカードが使えないため。tar は Windows 10 以降に標準）
-$tar = Join-Path $env:TEMP "wire_robot_deploy.tar"
-tar -C $tmp -cf $tar .
-scp $tar "${PiHost}:/tmp/wire_robot_deploy.tar"
-ssh $PiHost "tar -C ~/wire_robot -xf /tmp/wire_robot_deploy.tar && rm /tmp/wire_robot_deploy.tar"
-Remove-Item $tar
-ssh $PiHost "cd ~/wire_robot && python3 tests/test_logic.py && python3 tests/test_link.py"
-Write-Host "転送完了: ${PiHost}:~/wire_robot/"
+ssh $PiHost "cd $repo/src/wire_robot && python3 tests/test_logic.py && python3 tests/test_link.py"
+if ($LASTEXITCODE -ne 0) { Write-Error "ラズパイでのテストが失敗しました" }
+Write-Host "反映完了: ${PiHost}:$repo（~/wire_robot はここの src/wire_robot へのリンク）"
