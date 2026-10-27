@@ -11,7 +11,9 @@
 - 2026-10-27：SSH 鍵認証 設定済み（`ssh wire-pi`）。PI_HOST=wire-pi（ユーザー環境変数）。sudo はパスワード要
 - 2026-10-27：DualSense を入れ替え。旧 D4:2F:4B:50:E5:70 の登録を削除、新 34:6F:3F:7E:A8:FC をペアリング・信頼・接続済み（bluetoothctl）
 - 2026-10-27：setup_pi.sh 実行済み → 再起動 → deploy.ps1（push pi）で反映。Pi 上で tests 12 件すべて OK（Python 3.13.5）。IBT-2・IMU は未接続
-- 2026-10-27：link_check（机上・静止・近距離、8 秒）：Motion Sensors で生存確認 ok、受信 378〜766 回/秒、最大間隔 10.7〜28.7 ms（しきい値 200 ms に対し十分小さい）。電源 OFF 時の途絶検出・作業距離での確認・gamepad_check は未実施
+- 2026-10-27：link_check（机上・静止・近距離、8 秒）：Motion Sensors で生存確認 ok、受信 378〜766 回/秒、最大間隔 10.7〜28.7 ms（しきい値 200 ms に対し十分小さい）。作業距離での確認・gamepad_check は未実施
+- 2026-10-27：link_check で電源 OFF（PS 長押し）を確認：18:53:32 に lost を経ずに直接 disconnected（コントローラが正規に切断を送るため即時に切断扱い）。main.py は link != "ok" で停止なので停止する。直前まで最大間隔 13〜33 ms
+  - 未確認：切断を送らない電波断（遠ざかる、金属で覆う）での lost（0.2 秒タイムアウト）経路
   → PC 上で確認済み（2026-10-27）：空のリポジトリへの最初の push で作業ツリーが展開される／作業ツリーに変更があると push は "Working directory has unstaged changes" で拒否される
 
 ## 次の一手
