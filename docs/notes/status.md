@@ -17,10 +17,12 @@
 - 2026-10-27：ユーザーが Pi で `main.py --sim`（実コントローラ＋ダミーのモータ・IMU）を操作し「動いてそう」。項目ごと（中央復帰待ち・非常停止ラッチ・ワイヤ調整・傾き補正・ライトバー色）の合否は未記録
   → PC 上で確認済み（2026-10-27）：空のリポジトリへの最初の push で作業ツリーが展開される／作業ツリーに変更があると push は "Working directory has unstaged changes" で拒否される
 
-## 次の一手
-1. ラズパイで `tools/gamepad_check.py` → `tools/link_check.py`（Motion Sensors が見つかるか、受信の最大間隔）
-2. 仕様書第9章の空転試験（ワイヤなし）。手順5（安全）に「コントローラ電源OFFで約0.2秒で停止」を追加して確認
-3. 空転試験で invert / LATERAL_SIGN / IMU_AXIS_* の符号を確定し、decisions.md に記録
+## 次の一手（2026-10-27 終了時点）
+1. `main.py --sim` の安全項目を個別に確認して記録：起動時の中央復帰待ち、非常停止ラッチ（倒したまま OPTIONS で解除されない）、動作中の電源 OFF で停止、ライトバー色
+2. 電波断（遠ざかる／金属で覆う）で link_check が lost＋約 0.2 秒を出すか
+3. IMU（MPU6050）を接続 → `i2cdetect -y 1` で 0x68 → `tools/imu_check.py`
+4. IBT-2 を接続し、仕様書第9章の空転試験（ワイヤなし。モータを回すのでユーザーが実行）
+5. 空転試験で invert / LATERAL_SIGN / IMU_AXIS_* の符号を確定し、decisions.md に記録
 
 ## 未確認・推定
 - ドラム配置（上段=左右プーリ、下段=上下プーリ）→ 違えば WIRE_BUTTONS
