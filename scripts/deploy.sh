@@ -9,7 +9,7 @@ HOST="${1:-${PI_HOST:-}}"
 WITH_CONFIG=0
 [ "${2:-}" = "--config" ] && WITH_CONFIG=1
 
-SRC="$(cd "$(dirname "$0")/../program/wire_robot" && pwd)"
+SRC="$(cd "$(dirname "$0")/../src/wire_robot" && pwd)"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 cp -r "$SRC/." "$TMP/"

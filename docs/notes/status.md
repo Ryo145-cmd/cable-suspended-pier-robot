@@ -1,14 +1,14 @@
 # 現在地（最終更新 2026-10-27）
 
 ## 動いているもの
-- 制御プログラム一式（program/wire_robot/）。ハードなしのテスト（tests/test_logic.py, tests/test_link.py）は全部通る
+- 制御プログラム一式（src/wire_robot/）。ハードなしのテスト（tests/test_logic.py, tests/test_link.py）は全部通る
 - `main.py --sim` で結合確認済み：通信途絶（受信停止）から全モータ停止まで 0.207 秒
 - 実機では一度も動かしていない
 
 ## 進行中
 - ラズパイの環境構築（Raspberry Pi OS 64bit Lite）。`scripts/setup_pi.sh` → 再起動 → `scripts/deploy.ps1`
 - Claude Code（ユーザーの Windows PC）から SSH で作業する体制に移行中。SSH 鍵認証の設定がまだなら最初にやる
-- 2026-10-27：リポジトリは PC の `~/cable-suspended-pier-robot`。origin=GitHub(Ryo145-cmd/cable-suspended-pier-robot)、main を push 済み
+- 2026-10-27：リポジトリは PC の `~/cable-suspended-pier-robot`、構成は wall-climbing-robot-mecanum に揃えた。origin=GitHub(Ryo145-cmd/cable-suspended-pier-robot)、main を push 済み
 - 2026-10-27：ラズパイが手元になく SSH 未確認（raspberrypi.local の名前解決不可）。PC に鍵 ~/.ssh/id_ed25519 あり、known_hosts に Pi なし。接続先 ryosuke@raspberrypi.local、PI_HOST 未設定
   → Pi が来たら：鍵登録 → PI_HOST 設定 → setup_pi.sh → 再起動 → deploy.ps1 → テスト
 

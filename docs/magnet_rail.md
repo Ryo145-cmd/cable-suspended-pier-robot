@@ -6,7 +6,7 @@
 - 結果：くっついたが弱く、**はがれた**（ずり落ちではない）
 - 仮説：塗膜の影響
 
-写真：`concept_slide11.png`（構想図）、`test_girder.png`（試験体）、`test_setup.png`（取付状態）
+写真：`images/concept_slide11.png`（構想図）、`images/test_girder.png`（試験体）、`images/test_setup.png`（取付状態）
 
 ## 考えられる原因
 天井面なので荷重は真下＝マグネットが最も得意な垂直方向。それでもはがれた理由として：

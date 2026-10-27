@@ -6,3 +6,7 @@ __pycache__/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# 実験データ（中身は git 管理外。フォルダだけ残す）
+data/*
+!data/.gitkeep

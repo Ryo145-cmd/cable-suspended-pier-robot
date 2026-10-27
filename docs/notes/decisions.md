@@ -21,3 +21,8 @@
 - deploy スクリプトは既定で config.py を上書きしない：現場で調整した値を消さないため
 - 開発体制：ユーザーの Windows PC の Claude Code から SSH（鍵認証）でラズパイを操作。GitHub で管理
 - モータを回すコマンドは Claude Code が勝手に実行しない（CLAUDE.md 安全ルール）
+- リポジトリ構成を wall-climbing-robot-mecanum に揃える（ユーザー指示）
+  - notes/ → docs/notes/（current.md → status.md）、program/wire_robot/ → src/wire_robot/、docs/wire_robot_spec.pdf → docs/SPEC.pdf、
+    図・写真（docs/figs/、docs/*.png）→ docs/images/、実験データ用に data/（中身は git 管理外）
+  - scripts/（setup_pi.sh, deploy.*）は mecanum に無いが、ROS なしの本機では転送・構築に必要なので残す
+  - ラズパイ側の配置先 ~/wire_robot/ は変えない

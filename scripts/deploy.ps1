@@ -9,7 +9,7 @@ param(
 $ErrorActionPreference = "Stop"
 if (-not $PiHost) { Write-Error "接続先を指定してください（例: pi@raspberrypi.local）" }
 
-$src = Join-Path $PSScriptRoot "..\program\wire_robot"
+$src = Join-Path $PSScriptRoot "..\src\wire_robot"
 $tmp = Join-Path $env:TEMP "wire_robot_deploy"
 if (Test-Path $tmp) { Remove-Item $tmp -Recurse -Force }
 Copy-Item $src $tmp -Recurse

@@ -54,8 +54,8 @@
 # プロジェクト固有の指示 — 橋脚用ワイヤ吊り下げ式ロボット
 
 ユーザーとのやりとりは日本語。
-**記録フォルダは `notes/`**（上の 1. の「記録」）。セッション開始時に必ず読む：
-`notes/current.md`（現在地）→ `notes/decisions.md` → `notes/rejected.md` → `notes/pitfalls.md`
+**記録フォルダは `docs/notes/`**（上の 1. の「記録」）。セッション開始時に必ず読む：
+`docs/notes/status.md`（現在地）→ `docs/notes/decisions.md` → `docs/notes/rejected.md` → `docs/notes/pitfalls.md`
 
 ## 何のリポジトリか
 橋脚・鋼桁の塗膜を IH で加熱しスクレーパで剥がす装置（日本橋梁 IH式塗膜剥離装置）を、
@@ -65,12 +65,14 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 ## 構成
 | パス | 内容 |
 |---|---|
-| `program/wire_robot/` | 制御プログラム本体（ラズパイの `~/wire_robot/` に配置する） |
-| `program/wire_robot/config.py` | ピン・回転方向・ゲイン・ボタン。**実機調整は基本ここだけ** |
-| `program/wire_robot/README.md` | セットアップ・操作・安全機能の詳細 |
-| `docs/wire_robot_spec.pdf` | 仕様書（第9章が試験手順）。生成元HTMLは無いので PDF は手で更新できない |
-| `notes/` | 記録（現在地・決定・棄てた案・地雷）。**正本** |
+| `src/wire_robot/` | 制御プログラム本体（ラズパイの `~/wire_robot/` に配置する） |
+| `src/wire_robot/config.py` | ピン・回転方向・ゲイン・ボタン。**実機調整は基本ここだけ** |
+| `src/wire_robot/README.md` | セットアップ・操作・安全機能の詳細 |
+| `docs/SPEC.pdf` | 仕様書（第9章が試験手順）。生成元HTMLは無いので PDF は手で更新できない |
+| `docs/notes/` | 記録（現在地・決定・棄てた案・地雷）。**正本** |
 | `docs/magnet_rail.md` | レール固定マグネットの吸着不足の検討と試験方法 |
+| `docs/images/` | 図（svg）・写真 |
+| `data/` | 実験データ（中身は git 管理外） |
 | `scripts/setup_pi.sh` | ラズパイの環境構築（ラズパイ上で実行） |
 | `scripts/deploy.ps1` / `deploy.sh` | PC → ラズパイへプログラムを転送 |
 
@@ -88,7 +90,7 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 - `main.py --sim`、`tests/`、`tools/gamepad_check.py`、`tools/imu_check.py`、`tools/link_check.py` はモータを回さないので実行してよい
 - 安全機能（スティック中央復帰待ち、非常停止ラッチ、通信途絶 0.2 秒停止、EN 制御、傾き制限）を弱める変更はしない。変える必要があるときはユーザーに理由を説明して確認を取る
 - ピン番号・ENABLE_PIN の変更は配線と一致しているかユーザーに確認してから
-- 変更したら `python3 tests/test_logic.py && python3 tests/test_link.py`（`program/wire_robot/` で）を通す
+- 変更したら `python3 tests/test_logic.py && python3 tests/test_link.py`（`src/wire_robot/` で）を通す
 
 ## ハード（確定）
 - IBT-2(BTS7960)×4、12V ウォームギアモータ×4（エンコーダなし）、停止中はウォームギアで保持
