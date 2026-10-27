@@ -1,0 +1,8 @@
+# ラズパイで動くファイルは必ず LF（CRLF だと bash/python が動かない）
+* text=auto
+*.py text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.ps1 text eol=crlf
+*.pdf binary
+*.png binary
