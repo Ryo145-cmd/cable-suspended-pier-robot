@@ -36,3 +36,8 @@
   - 理由：既存ファイル（Dynamixel_tutorial, venv, test）を消さずに済む。メモリ 3.8GB 中 使用 338MB で余裕。必要パッケージは全て apt にあり、ryosuke は gpio/i2c/input 所属済み
   - 欠点：起動が遅い、デスクトップの Bluetooth 管理と競合しうる（ペアリングは bluetoothctl で）、Python 3.13 は未検証（Pi 上のテストで確認）
 - PC からの接続名は SSH config の別名 `wire-pi`（ryosuke@172.20.10.2、HostKeyAlias raspberrypi.local）。PI_HOST=wire-pi、remote pi=wire-pi:cable-suspended-pier-robot
+
+## 2026-10-28
+- IH 塗膜剥離装置からの電磁ノイズ対策として、制御回路（ラズパイ・IBT-2 など）を電装ボックスに収める（ユーザー決定）
+  - 未定（ユーザーに確認中）：ボックスの材質（金属か樹脂か）、収める範囲（リポ・DCDC・ブレーカー・IMU を入れるか）、以前の案「基板の下にアルミ板＋1点接地」との関係（置き換えか併用か）
+  - 金属ボックスの場合の懸念：内蔵 Bluetooth（DualSense）と Wi-Fi（SSH）の電波が遮られる → 通信途絶で常に停止しうる。外付けアンテナ／USB ドングルを延長で箱の外へ、などが必要
