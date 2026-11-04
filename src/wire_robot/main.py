@@ -6,6 +6,8 @@
   python3 main.py                 実機
   python3 main.py --sim           モータ・IMUをダミーにして動作確認（コントローラは実物）
   python3 main.py --log run.csv   制御ログをCSVに保存（調整用）
+  python3 main.py --no-imu        IMUなしで実モータを回す（空転試験専用。ワイヤを外して使う）
+                                  傾きは常に0°扱い・傾き補正OFF・傾き制限は働かない
 
 スティックを ±0.2 より大きく倒している間だけ動く（離せば停止）。
 モード（PSボタンで切り替え、スティックを離した状態で）
@@ -38,18 +40,29 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sim", action="store_true", help="モータ・IMUをダミーで動かす")
     ap.add_argument("--log", help="CSVログの保存先")
+    ap.add_argument("--no-imu", action="store_true",
+                    help="IMUなしで動かす（空転試験専用。傾き補正・傾き制限は働かない）")
     args = ap.parse_args()
+
+    if args.no_imu and not args.sim:
+        print("!! IMU なしモード：傾き補正と傾き制限（TILT_LIMIT_DEG）は働きません")
+        print("!! 空転試験専用です。ワイヤを外す（またはたるませる）こと、ブレーカーに人がいることを確認")
+        if input("ワイヤを外しましたか？ 外したら yes と入力 > ").strip().lower() != "yes":
+            print("中止します")
+            return
 
     motors = build_motors(C, sim=args.sim)
     motors.enable(False)
-    imu = build_imu(C, sim=args.sim)
-    if args.sim:
+    imu = None if args.no_imu else build_imu(C, sim=args.sim)
+    if args.sim and imu:
         imu.attach(motors)
 
-    est = TiltEstimator(imu, C)
-    print("IMU 校正中… 機体を静止させてください")
-    est.calibrate(C.IMU_CALIB_SAMPLES)
-    print(f"  ジャイロバイアス {est.bias:+.3f} deg/s, 初期傾き {est.angle:+.2f} deg")
+    est = None
+    if imu:
+        est = TiltEstimator(imu, C)
+        print("IMU 校正中… 機体を静止させてください")
+        est.calibrate(C.IMU_CALIB_SAMPLES)
+        print(f"  ジャイロバイアス {est.bias:+.3f} deg/s, 初期傾き {est.angle:+.2f} deg")
 
     tilt = TiltController(C.TILT_KP, C.TILT_KI, C.TILT_I_LIMIT,
                           C.TILT_MAX_CORRECTION, C.TILT_DEADBAND_DEG)
@@ -63,7 +76,7 @@ def main():
         log.write("t,mode,theta,vy,vx,corr,UL,UR,LL,LR,active,link,rx_age\n")
 
     mode = "DRIVE"
-    tilt_on = C.TILT_CORRECTION_DEFAULT_ON
+    tilt_on = C.TILT_CORRECTION_DEFAULT_ON and est is not None
     wire_sel = None             # ワイヤ調整モードで選択中のモータ
     estop = False
     need_center = True          # スティックが中央に戻るまで動かさない
@@ -86,9 +99,9 @@ def main():
             dt = max(1e-3, now - last)
             last = now
 
-            if args.sim:
+            if args.sim and imu:
                 imu.step(dt)
-            theta = est.update(dt)
+            theta = est.update(dt) if est else 0.0   # IMU なしは常に水平扱い
 
             # ---- スティック ----
             raw_y = pad.axis(C.AXIS_VERTICAL, C.AXIS_VERTICAL_INVERT)
@@ -146,9 +159,12 @@ def main():
                             pad.rumble(C.SELECT_RUMBLE_MS)
                             print(f"\n選択: {m}（{C.MOTOR_LABELS[m]}）")
             if pad.code(C.BTN_TILT_TOGGLE) in edges:
-                tilt_on = not tilt_on
-                print(f"\n傾き補正: {'ON' if tilt_on else 'OFF'}")
-            if pad.code(C.BTN_LEVEL_ZERO) in edges and centered:
+                if est is None:
+                    print("\nIMU なしのため傾き補正は使えません")
+                else:
+                    tilt_on = not tilt_on
+                    print(f"\n傾き補正: {'ON' if tilt_on else 'OFF'}")
+            if pad.code(C.BTN_LEVEL_ZERO) in edges and centered and est:
                 est.set_zero()
                 theta = 0.0
                 print("\n現在の姿勢を水平として記録")
@@ -218,6 +234,8 @@ def main():
                 else:
                     state = "動作中" if active else "待機"
                 warn = " 傾き過大!" if abs(theta) > C.TILT_LIMIT_DEG else ""
+                if est is None:
+                    warn += " [IMUなし]"
                 if mode == "DRIVE":
                     head = f"[走行 {state}] 補正{'ON ' if tilt_on else 'OFF'}"
                 else:
@@ -233,7 +251,8 @@ def main():
     finally:
         motors.stop_all()
         motors.close()
-        imu.close()
+        if imu:
+            imu.close()
         if log:
             log.close()
 
