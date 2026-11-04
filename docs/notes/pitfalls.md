@@ -16,6 +16,9 @@
 - bluetoothctl をパイプで使うと "Failed to register agent object"（デスクトップ版の Bluetooth 管理が既に agent を登録しているため）が出るが、DualSense のペアリングは成功する
 - DualSense をほかの機器（PS5・PC・ESP32 など）とつなぐと、ラズパイ側は Paired/Trusted のままでも再接続できなくなる（2026-11-04）→ ラズパイで remove して PS＋クリエイト長押しでペアリングし直す
 - IMU_AXIS_* を変えると、SimIMU が決め打ちだった頃は sim とテストだけ補正が逆向きになった（2026-11-04 修正済み。SimIMU は cfg に従う）
+- 電波断の試験中にスマホ（テザリング）ごと離れると Pi のネットワークも切れて SSH が落ちる → 記録は Pi 上で nohup してファイルへ。スマホは Pi のそばに置く
+- `ssh wire-pi "pkill -f パターン"` はコマンド文字列自体にパターンが含まれ自分の SSH を殺す → `pkill -f "[p]attern"` と書く
+- GitHub への push がときどき Internal Server Error（2026-11-04 に2回）→ 少し待って再試行すれば通る
 - 非対話の `ssh wire-pi "i2cdetect ..."` は PATH に /usr/sbin が無く「コマンドが見つかりません」→ `/usr/sbin/i2cdetect` と書く
 - Wi-Fi 2.4GHz と Bluetooth は干渉する → ラズパイの Wi-Fi は 5GHz か有線
 
