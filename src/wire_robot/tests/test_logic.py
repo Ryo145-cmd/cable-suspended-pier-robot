@@ -59,7 +59,7 @@ def test_wire_adjust_single_motor():
 def test_closed_loop_levels_robot():
     """シミュレータで 3° 傾いた機体が水平に戻るか"""
     ms = build_motors(C, sim=True)
-    imu = SimIMU(initial_tilt=3.0)
+    imu = SimIMU(C, initial_tilt=3.0)
     imu.attach(ms)
     est = TiltEstimator(imu, C)
     est.calibrate(5)

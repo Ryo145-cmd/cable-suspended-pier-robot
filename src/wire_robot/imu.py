@@ -32,9 +32,11 @@ class MPU6050:
 
 
 class SimIMU:
-    """シミュレーション用。モータの差動で傾きが変わる簡易モデル"""
+    """シミュレーション用。モータの差動で傾きが変わる簡易モデル
+    出力は cfg の IMU_AXIS_*（取り付け向き）に合わせて各軸へ割り振る"""
 
-    def __init__(self, initial_tilt=3.0):
+    def __init__(self, cfg, initial_tilt=3.0):
+        self.cfg = cfg
         self.theta = initial_tilt
         self.rate = 0.0
         self.motors = None
@@ -51,8 +53,12 @@ class SimIMU:
 
     def read(self):
         t = math.radians(self.theta)
-        return ({"x": -math.sin(t), "y": math.cos(t), "z": 0.0},
-                {"x": 0.0, "y": 0.0, "z": self.rate})
+        a = {"x": 0.0, "y": 0.0, "z": 0.0}
+        g = {"x": 0.0, "y": 0.0, "z": 0.0}
+        _put(a, self.cfg.IMU_AXIS_RIGHT, -math.sin(t))
+        _put(a, self.cfg.IMU_AXIS_UP, math.cos(t))
+        _put(g, self.cfg.IMU_AXIS_NORMAL, self.rate)
+        return a, g
 
     def close(self):
         pass
@@ -61,6 +67,12 @@ class SimIMU:
 def _pick(vec, spec):
     s = -1.0 if spec[0] == "-" else 1.0
     return s * vec[spec[-1]]
+
+
+def _put(vec, spec, value):
+    """_pick の逆：機体座標の値を IMU の軸へ書き込む"""
+    s = -1.0 if spec[0] == "-" else 1.0
+    vec[spec[-1]] = s * value
 
 
 class TiltEstimator:
@@ -102,7 +114,7 @@ class TiltEstimator:
 
 def build_imu(cfg, sim=False):
     if sim:
-        return SimIMU()
+        return SimIMU(cfg)
     if cfg.IMU_TYPE == "mpu6050":
         return MPU6050(cfg.IMU_I2C_BUS, cfg.IMU_I2C_ADDR)
     raise ValueError(f"不明な IMU_TYPE: {cfg.IMU_TYPE}")
