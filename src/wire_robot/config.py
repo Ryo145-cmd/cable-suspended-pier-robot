@@ -84,7 +84,7 @@ IMU_I2C_ADDR = 0x68
 # 例) "+x", "-y", "+z"。tools/imu_check.py で確認する
 IMU_AXIS_RIGHT = "+x"
 IMU_AXIS_UP = "+y"
-IMU_AXIS_NORMAL = "+z"   # 正の角速度 = 右側が下がる向き になる符号を選ぶ
+IMU_AXIS_NORMAL = "-z"   # 正の角速度 = 右側が下がる向き になる符号を選ぶ（2026-11-04 imu_check で確定）
 IMU_CALIB_SAMPLES = 200  # 起動時のジャイロバイアス計測サンプル数（静止させる）
 
 # ============================================================
