@@ -8,7 +8,7 @@
 ## 進行中
 - ラズパイの環境構築（既存の Raspberry Pi OS デスクトップ版 trixie をそのまま使う）。`scripts/setup_pi.sh` → 再起動 → `scripts/deploy.ps1`（中身は `git push pi main`。PC に remote pi は追加済み）
 - 2026-10-27：リポジトリは PC の `~/cable-suspended-pier-robot`、構成は wall-climbing-robot-mecanum に揃えた。origin=GitHub(Ryo145-cmd/cable-suspended-pier-robot)、main を push 済み
-- 2026-10-27：SSH 鍵認証 設定済み（`ssh wire-pi`）。PI_HOST=wire-pi（ユーザー環境変数）。sudo はパスワード要
+- 2026-10-27：SSH 鍵認証 設定済み（`ssh wire-pi`）。PI_HOST=wire-pi（ユーザー環境変数）。sudo はパスワード要。ただし 2026-11-04 から poweroff / reboot だけは `sudo -n` で可（/etc/sudoers.d/010-poweroff）
 - 2026-10-27：DualSense を入れ替え。旧 D4:2F:4B:50:E5:70 の登録を削除、新 34:6F:3F:7E:A8:FC をペアリング・信頼・接続済み（bluetoothctl）
 - 2026-10-27：setup_pi.sh 実行済み → 再起動 → deploy.ps1（push pi）で反映。Pi 上で tests 12 件すべて OK（Python 3.13.5）。IBT-2・IMU は未接続
 - 2026-10-27：link_check（机上・静止・近距離、8 秒）：Motion Sensors で生存確認 ok、受信 378〜766 回/秒、最大間隔 10.7〜28.7 ms（しきい値 200 ms に対し十分小さい）。作業距離での確認・gamepad_check は未実施
