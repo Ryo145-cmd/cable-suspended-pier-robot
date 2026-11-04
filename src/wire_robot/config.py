@@ -26,14 +26,14 @@ PWM_FREQUENCY = 1000            # [Hz]
 # GPIO26 は起動直後プルダウンなので、プログラムが動くまでモータは回らない
 ENABLE_PIN = 26
 
-# ピン番号は BCM 番号（I2C の GPIO2/3 は IMU 用なので使わない）
+# ピン番号は BCM 番号（I2C の GPIO2/3 は IMU 用なので使わない。GPIO10 は SPI 兼用なので SPI は無効にしておく）
 #   rpwm : IBT-2 の RPWM（+指令でこちらにPWM）
 #   lpwm : IBT-2 の LPWM
 MOTORS = {
-    "UL": {"rpwm": 12, "lpwm": 13, "invert": False},
-    "UR": {"rpwm": 18, "lpwm": 19, "invert": True},
-    "LL": {"rpwm": 20, "lpwm": 21, "invert": False},
-    "LR": {"rpwm": 23, "lpwm": 24, "invert": True},
+    "UL": {"rpwm": 27, "lpwm": 17, "invert": False},
+    "UR": {"rpwm": 19, "lpwm": 13, "invert": True},
+    "LL": {"rpwm": 10, "lpwm": 22, "invert": False},
+    "LR": {"rpwm": 6, "lpwm": 5, "invert": True},
 }
 # 表示名
 MOTOR_LABELS = {

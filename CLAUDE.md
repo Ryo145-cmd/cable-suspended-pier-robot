@@ -101,7 +101,7 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 
 ## ハード（確定）
 - IBT-2(BTS7960)×4、12V ウォームギアモータ×4（エンコーダなし）、停止中はウォームギアで保持
-- ピン(BCM) UL:12/13 UR:18/19 LL:20/21 LR:23/24、EN共通:GPIO26、IMU: I2C(GPIO2/3)
+- ピン(BCM) UL:27/17 UR:19/13 LL:10/22 LR:6/5（RPWM/LPWM、2026-11-04 変更。GPIO10 は SPI 兼用なので SPI 無効）、EN共通:GPIO26、IMU: I2C(GPIO2/3)
 - IBT-2 VCC は 3.3V（5V不可）、R_IS/L_IS 未使用
 - 電源：リポ → DCブレーカー15A → IBT-2 ／ トグルSW → DCDC 5V3A → ラズパイ
 
