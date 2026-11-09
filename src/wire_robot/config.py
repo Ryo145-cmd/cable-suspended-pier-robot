@@ -30,10 +30,10 @@ ENABLE_PIN = 26
 #   rpwm : IBT-2 の RPWM（+指令でこちらにPWM）
 #   lpwm : IBT-2 の LPWM
 MOTORS = {
-    "UL": {"rpwm": 27, "lpwm": 17, "invert": False},
-    "UR": {"rpwm": 19, "lpwm": 13, "invert": True},
-    "LL": {"rpwm": 10, "lpwm": 22, "invert": False},
-    "LR": {"rpwm": 6, "lpwm": 5, "invert": True},
+    "UL": {"rpwm": 10, "lpwm": 22, "invert": False},
+    "UR": {"rpwm": 6, "lpwm": 5, "invert": True},
+    "LL": {"rpwm": 27, "lpwm": 17, "invert": False},
+    "LR": {"rpwm": 19, "lpwm": 13, "invert": True},
 }
 # 表示名
 MOTOR_LABELS = {

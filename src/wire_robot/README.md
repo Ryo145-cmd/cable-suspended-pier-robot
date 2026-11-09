@@ -22,10 +22,10 @@ OS は Raspberry Pi OS（64bit, Lite）。仕様の全体は同梱の仕様書 P
 
 | モータ | 役割 | RPWM | LPWM |
 |---|---|---|---|
-| UL | 左 上下プーリ（外側） | GPIO27 | GPIO17 |
-| UR | 右 上下プーリ（外側） | GPIO19 | GPIO13 |
-| LL | 左 左右プーリ（内側） | GPIO10 | GPIO22 |
-| LR | 右 左右プーリ（内側） | GPIO6 | GPIO5 |
+| UL | 左 上下プーリ（外側） | GPIO10 | GPIO22 |
+| UR | 右 上下プーリ（外側） | GPIO6 | GPIO5 |
+| LL | 左 左右プーリ（内側） | GPIO27 | GPIO17 |
+| LR | 右 左右プーリ（内側） | GPIO19 | GPIO13 |
 
 | 共通 | ラズパイのピン |
 |---|---|
