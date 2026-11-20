@@ -81,6 +81,7 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 | `data/` | 実験データ（中身は git 管理外） |
 | `scripts/setup_pi.sh` | ラズパイの環境構築（ラズパイ上で実行） |
 | `scripts/deploy.ps1` / `deploy.sh` | PC → ラズパイへ反映（`git push pi main` → ラズパイでテスト） |
+| `scripts/pair_controller.sh` | DualSense のペアリングし直し（ラズパイ上で実行）。「コントローラがつながらない」と言われたらまずこれ |
 
 ## ラズパイへの接続
 - 接続先は環境変数 `PI_HOST`（例 `pi@raspberrypi.local`）。未設定ならユーザーに聞く

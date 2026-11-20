@@ -15,7 +15,7 @@
 - 2026-11-20 ラズパイの IP が 172.20.10.2 → 172.20.10.3 に変わった（ARP で MAC e4-5f-01-26-79-1c を探して判明）→ ~/.ssh/config の wire-pi の HostName を直した。つながらなければまず 172.20.10.1〜14 を ping して arp -a
 - テザリングの IP（172.20.10.x）は機体間で使い回される。known_hosts の 172.20.10.2 には mecanum の Pi の鍵が残っている → 消さずに HostKeyAlias で照合
 - bluetoothctl をパイプで使うと "Failed to register agent object"（デスクトップ版の Bluetooth 管理が既に agent を登録しているため）が出るが、DualSense のペアリングは成功する
-- DualSense をほかの機器（PS5・PC・ESP32 など）とつなぐと、ラズパイ側は Paired/Trusted のままでも再接続できなくなる（2026-11-04）→ ラズパイで remove して PS＋クリエイト長押しでペアリングし直す。2026-11-09 にも再発し、同じ手順で解決（ほかの機器とつないだかは未確認）
+- DualSense をほかの機器（PS5・PC・ESP32 など）とつなぐと、ラズパイ側は Paired/Trusted のままでも再接続できなくなる（2026-11-04）→ ラズパイで remove して PS＋クリエイト長押しでペアリングし直す。2026-11-09 にも再発し、同じ手順で解決（ほかの機器とつないだかは未確認）。2026-11-20 に 3 回目 → `scripts/pair_controller.sh` を追加（PC から `ssh wire-pi "bash ~/cable-suspended-pier-robot/scripts/pair_controller.sh"`）
 - IMU_AXIS_* を変えると、SimIMU が決め打ちだった頃は sim とテストだけ補正が逆向きになった（2026-11-04 修正済み。SimIMU は cfg に従う）
 - 電波断の試験中にスマホ（テザリング）ごと離れると Pi のネットワークも切れて SSH が落ちる → 記録は Pi 上で nohup してファイルへ。スマホは Pi のそばに置く
 - `ssh wire-pi "pkill -f パターン"` はコマンド文字列自体にパターンが含まれ自分の SSH を殺す → `pkill -f "[p]attern"` と書く
