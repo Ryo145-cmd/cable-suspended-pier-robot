@@ -96,3 +96,7 @@
 - IMU の傾きを、必要な区間だけ記録したい（ユーザー）。`--log` は起動から終了まで 1 ファイルで、同じ名前で起動すると上書きされる（13:25 の --no-imu ログを上書きしかけた）
 - ○（BTN_EAST）を押すたびに `~/wire_logs/rec_YYYYmmdd_HHMMSS.csv` を新しく作り、もう一度押すと閉じる。列は --log と同じ（t,mode,theta,vy,vx,corr,UL,UR,LL,LR,active,link,rx_age）、50 行/秒。記録中は状態表示に ●REC、開始・停止で短く振動
 - 傾きを記録しつつ補正しないなら `--tilt-off` と組み合わせる。`--no-imu` だと θ は常に 0（開始時に表示で知らせる）
+
+## 2026-11-20 実験データも GitHub に上げる
+- ユーザー指示「データも含めて git にあげといて」。それまでは data/ は git 管理外（.gitignore）だった → .gitignore から外し、CLAUDE.md も変更
+- 置き場所は `data/日付/`。ラズパイから scp で取ってくる。1 日 6MB 程度（CSV、50 行/秒）。増えてきたら圧縮か Git LFS を検討

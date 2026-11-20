@@ -61,7 +61,7 @@
 - GitHub：https://github.com/Ryo145-cmd/cable-suspended-pier-robot（PC の作業コピーは `C:\Users\bellr\cable-suspended-pier-robot`）
 - **節目ごと（作業の区切り、方針変更、`/compact` の直前）に、記録とコードを commit して push する。** PC にだけ残さない。記録の正本は GitHub
 - コミットメッセージは日本語で、何をしたかを 1 行で書く
-- 実験データは `data/` に置き、commit しない（`.gitignore` 済み）
+- 実験データは `data/日付/` に置き、commit して push する（2026-11-20 ユーザー指示で変更。それまでは git 管理外）。ラズパイの `~/wire_logs/`・`~/run_*.csv` から scp で取ってくる
 
 ## 何のリポジトリか
 橋脚・鋼桁の塗膜を IH で加熱しスクレーパで剥がす装置（日本橋梁 IH式塗膜剥離装置）を、
@@ -78,7 +78,7 @@ Raspberry Pi 4B 上の Python3。PS5 DualSense（Bluetooth）で手動操縦、M
 | `docs/notes/` | 記録（現在地・決定・棄てた案・地雷）。**正本** |
 | `docs/magnet_rail.md` | レール固定マグネットの吸着不足の検討と試験方法 |
 | `docs/images/` | 図（svg）・写真 |
-| `data/` | 実験データ（中身は git 管理外） |
+| `data/` | 実験データ（日付ごとのフォルダ。git で管理） |
 | `scripts/setup_pi.sh` | ラズパイの環境構築（ラズパイ上で実行） |
 | `scripts/deploy.ps1` / `deploy.sh` | PC → ラズパイへ反映（`git push pi main` → ラズパイでテスト） |
 | `scripts/pair_controller.sh` | DualSense のペアリングし直し（ラズパイ上で実行）。「コントローラがつながらない」と言われたらまずこれ |
