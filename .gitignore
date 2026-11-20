@@ -7,4 +7,5 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-# 実験データ（中身は git 管理外。フォルダだけ残す）
+# 実験データ（data/ の CSV は git で管理する。2026-11-20 から）
+!data/**/*.csv
