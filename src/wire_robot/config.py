@@ -106,6 +106,8 @@ BTN_RESET = "BTN_START"        # OPTIONS：非常停止の解除（スティッ�
 BTN_TILT_TOGGLE = "BTN_NORTH"  # △：傾き補正 ON/OFF
 BTN_LEVEL_ZERO = "BTN_SELECT"  # CREATE：今の姿勢を「水平」として記録
 BTN_SWITCH_MODE = "BTN_MODE"   # PSボタン：走行モード ⇔ ワイヤ調整モード（スティックを離した状態で）
+BTN_RECORD = "BTN_EAST"        # ○：記録の開始／停止（押すたびに REC_DIR に新しいファイル）
+REC_DIR = "~/wire_logs"        # ○ボタンの記録の保存先（日時入りのファイル名。上書きしない）
 
 # 通信の生存確認（ウォッチドッグ）
 #   DualSense のモーションセンサから常に流れてくるイベントを受信の証拠にし、

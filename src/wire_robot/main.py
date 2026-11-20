@@ -5,7 +5,8 @@
 
   python3 main.py                 実機
   python3 main.py --sim           モータ・IMUをダミーにして動作確認（コントローラは実物）
-  python3 main.py --log run.csv   制御ログをCSVに保存（調整用）
+  python3 main.py --log run.csv   制御ログをCSVに保存（調整用。起動から終了まで全部）
+  ○ボタン                         記録の開始／停止（~/wire_logs/rec_日時.csv。θ・指令・モータ出力）
   python3 main.py --no-imu        IMUなしで実モータを回す（空転試験専用。ワイヤを外して使う）
                                   傾きは常に0°扱い・傾き補正OFF・傾き制限は働かない
 
@@ -24,6 +25,7 @@
 通信の生存確認：コントローラからの受信が LINK_TIMEOUT_SEC（0.2秒）途絶えたら全停止
 """
 import argparse
+import os
 import time
 
 import config as C
@@ -34,6 +36,7 @@ from mixer import apply_deadzone, axis_lock, mix, wire_adjust
 from motors import build_motors
 
 MOTOR_ORDER = list(C.MOTORS.keys())
+LOG_HEADER = "t,mode,theta,vy,vx,corr,UL,UR,LL,LR,active,link,rx_age\n"
 
 
 def main():
@@ -75,7 +78,9 @@ def main():
 
     log = open(args.log, "w") if args.log else None
     if log:
-        log.write("t,mode,theta,vy,vx,corr,UL,UR,LL,LR,active,link,rx_age\n")
+        log.write(LOG_HEADER)
+    rec = None                  # ○ボタンの記録（開いているファイル）
+    rec_path, rec_rows = "", 0
 
     mode = "DRIVE"
     tilt_on = C.TILT_CORRECTION_DEFAULT_ON and est is not None and not args.tilt_off
@@ -94,7 +99,7 @@ def main():
     }
 
     print("操作: 左スティック上下=上下 / 右スティック左右=左右 | R1高速 | ×非常停止 | OPTIONS解除")
-    print("      △傾き補正 | CREATE水平記録 | PSボタン=ワイヤ調整モード（肩ボタン+左スティック上下）")
+    print("      △傾き補正 | CREATE水平記録 | ○記録 開始/停止 | PSボタン=ワイヤ調整モード（肩ボタン+左スティック上下）")
     try:
         while True:
             now = time.monotonic()
@@ -170,6 +175,22 @@ def main():
                 est.set_zero()
                 theta = 0.0
                 print("\n現在の姿勢を水平として記録")
+            if pad.code(C.BTN_RECORD) in edges:
+                if rec is None:
+                    d = os.path.expanduser(C.REC_DIR)
+                    os.makedirs(d, exist_ok=True)
+                    rec_path = os.path.join(d, time.strftime("rec_%Y%m%d_%H%M%S.csv"))
+                    rec = open(rec_path, "w", buffering=1)
+                    rec.write(LOG_HEADER)
+                    rec_rows = 0
+                    pad.rumble(C.SELECT_RUMBLE_MS)
+                    note = "（IMU なしのため θ は常に 0）" if est is None else ""
+                    print(f"\n● 記録開始 {rec_path}{note}")
+                else:
+                    rec.close()
+                    rec = None
+                    pad.rumble(C.SELECT_RUMBLE_MS)
+                    print(f"\n■ 記録停止 {rec_path}（{rec_rows} 行、約 {rec_rows / C.LOOP_HZ:.0f} 秒）")
 
             if need_center and centered:
                 need_center = False
@@ -219,10 +240,15 @@ def main():
 
             # ---- 表示・ログ ----
             L = motors.last
-            if log:
-                log.write(f"{now - t0:.3f},{mode},{theta:.3f},{vy:.3f},{vx:.3f},{corr:.3f},"
-                          f"{L['UL']:.3f},{L['UR']:.3f},{L['LL']:.3f},{L['LR']:.3f},{int(active)},"
-                          f"{link},{now - pad.last_rx:.3f}\n")
+            if log or rec:
+                row = (f"{now - t0:.3f},{mode},{theta:.3f},{vy:.3f},{vx:.3f},{corr:.3f},"
+                       f"{L['UL']:.3f},{L['UR']:.3f},{L['LL']:.3f},{L['LR']:.3f},{int(active)},"
+                       f"{link},{now - pad.last_rx:.3f}\n")
+                if log:
+                    log.write(row)
+                if rec:
+                    rec.write(row)
+                    rec_rows += 1
             if now >= next_status:
                 next_status = now + 1.0 / C.STATUS_HZ
                 if estop:
@@ -238,6 +264,8 @@ def main():
                 warn = " 傾き過大!" if abs(theta) > C.TILT_LIMIT_DEG else ""
                 if est is None:
                     warn += " [IMUなし]"
+                if rec:
+                    warn += " ●REC"
                 if mode == "DRIVE":
                     head = f"[走行 {state}] 補正{'ON ' if tilt_on else 'OFF'}"
                 else:
@@ -257,6 +285,9 @@ def main():
             imu.close()
         if log:
             log.close()
+        if rec:
+            rec.close()
+            print(f"記録を保存 {rec_path}（{rec_rows} 行）")
 
 
 if __name__ == "__main__":
