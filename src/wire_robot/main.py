@@ -42,6 +42,8 @@ def main():
     ap.add_argument("--log", help="CSVログの保存先")
     ap.add_argument("--no-imu", action="store_true",
                     help="IMUなしで動かす（空転試験専用。傾き補正・傾き制限は働かない）")
+    ap.add_argument("--tilt-off", action="store_true",
+                    help="IMU で傾きを読んで記録するが、補正は OFF で起動（傾き制限は働く。△で ON にできる）")
     args = ap.parse_args()
 
     if args.no_imu and not args.sim:
@@ -76,7 +78,7 @@ def main():
         log.write("t,mode,theta,vy,vx,corr,UL,UR,LL,LR,active,link,rx_age\n")
 
     mode = "DRIVE"
-    tilt_on = C.TILT_CORRECTION_DEFAULT_ON and est is not None
+    tilt_on = C.TILT_CORRECTION_DEFAULT_ON and est is not None and not args.tilt_off
     wire_sel = None             # ワイヤ調整モードで選択中のモータ
     estop = False
     need_center = True          # スティックが中央に戻るまで動かさない
