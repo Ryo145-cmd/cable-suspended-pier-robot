@@ -19,7 +19,7 @@
 #   "pwm_dir" : PWMピン + 方向ピン（Cytron MD10C / MDD10A など）
 #   "in1_in2" : 2本の入力ピンをPWM（L298N / DRV8833 など）
 MOTOR_DRIVER_MODE = "ibt2"
-PWM_FREQUENCY = 1000            # [Hz]
+PWM_FREQUENCY = 10000           # [Hz] 2026-11-20 1kHz の鳴きが耳障りで変更。lgpio のソフトPWMは 10kHz が上限
 
 # 4台の IBT-2 の R_EN と L_EN をすべてまとめてこのピンへ（BCM番号）
 # Lにすると全ブリッジが切れる＝全モータ停止。None なら EN は IBT-2 上で VCC(3.3V) に直結している扱い
